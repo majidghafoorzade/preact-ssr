@@ -1,5 +1,6 @@
 import express, { Express, Request, Response } from "express";
 import dotEnv from "dotenv";
+import { renderApp } from "server/providers/renderApp";
 
 // Init env variables
 dotEnv.config();
@@ -15,8 +16,12 @@ app.set("view engine", "hbs");
 app.set("views", "./src/server/views");
 
 // Create Wildcard route
-app.get("/*", function (req: Request, res: Response) {
-  res.render("application.hbs");
+app.get("/*", async function (req: Request, res: Response) {
+  const { html } = await renderApp();
+
+  res.render("application.hbs", {
+    html,
+  });
 });
 
 // Run Express server
